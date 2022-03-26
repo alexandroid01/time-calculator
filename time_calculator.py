@@ -1,14 +1,11 @@
 # time calculator exercise from https://www.freecodecamp.org/learn/scientific-computing-with-python/scientific-computing-with-python-projects/time-calculator
 
-    # a start time in the 12-hour clock format (ending in AM or PM)
-    # a duration time that indicates the number of hours and minutes
     # (optional) a starting day of the week, case insensitive
-    # The function should add the duration time to the start time and return the result.
-    # If the result will be the next day, it should show (next day) after the time. 
-    # If the result will be more than one day later, it should show (n days later) after the time, where "n" is the number of days later.
+
+import math
 
 def add_time(start, duration):
-    # step 1: separate the hour and the minutes in the start and duration variables
+    # separate the hour and the minutes in the start and duration variables
     start = start.split(" ")
     am_or_pm = start[1]
 
@@ -20,24 +17,54 @@ def add_time(start, duration):
     duration_hours = int(duration_split[0])
     duration_minutes = int(duration_split[1])
 
-    # step 2: add the start_hours + duration_hours, and the start_minutes + duration_minutes
+    # change into 24-hour time for ease of calculation
+    if am_or_pm == "PM":
+        start_hours = start_hours + 12
+
+    # add the start_hours + duration_hours, and the start_minutes + duration_minutes
     new_hours = start_hours + duration_hours
     new_minutes = start_minutes + duration_minutes
-    
-    # step 3: carry over minutes into hours
-    if new_minutes >= 60:
+
+    # carry over the minutes into hours, if applicable
+    if start_minutes + duration_minutes >= 60:
         new_minutes = new_minutes - 60
         new_hours = new_hours + 1 
 
-    # step 4: format new_minutes if result is a single-digit integer
+    # calculate how many days fit into the new hours
+    number_days = math.trunc(new_hours / 24)
+    new_hours = new_hours - (24 * number_days)
+   
+    # change back into 12-hour time
+    # LOGIC ERROR NEED TO FIX
+    # example- start time 1:00 PM, duration time 22:00. Output: 11:00 PM (next day). Expected Output: 11:00 AM (next day)
+    # example- start time 5:00 PM, duration time 7:01. Output: 0:01 PM (next day). Expected Output: 12:01 AM (next day)
+
+    if new_hours >= 12:
+        if am_or_pm == "AM":
+            am_or_pm = "PM"
+        else:
+            am_or_pm = "AM"
+    
+    if new_hours > 12:
+        new_hours = new_hours - 12
+
+    # if new_minutes is a single-digit integer, format new_minutes to display a zero before the digit
     if new_minutes < 10:
         new_minutes = str(new_minutes).zfill(2)  
-    
-    print(new_hours)
-    print(new_minutes)
 
-    # step 5: figure out how to deal with the AM and PM situation, and carrying over into the next day
-    # ^maybe start with 24-hour time and then figure out how to convert?
+    # determine what message to print for number of days later
+    if number_days == 0:
+        days_later = "same day"
+    elif number_days == 1:
+        days_later = "next day"
+    else:
+        days_later = str(number_days) + " days later"
 
-add_time("2:02 PM", "1:03")
+    print(f"{new_hours}:{new_minutes} {am_or_pm} ({days_later})")
+
+# beginning of program 
+user_start = input("Enter the start time: ")
+user_duration = input("Enter the duration time: ")
+
+add_time(user_start, user_duration)
 

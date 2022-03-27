@@ -1,10 +1,8 @@
 # time calculator exercise from https://www.freecodecamp.org/learn/scientific-computing-with-python/scientific-computing-with-python-projects/time-calculator
 
-# optional: add day of the week
-
 import math
 
-def add_time(start, duration):
+def add_time(start, duration, day):
     # separate the hour and the minutes in the start and duration variables
     start = start.split(" ")
     am_or_pm = start[1]
@@ -16,6 +14,24 @@ def add_time(start, duration):
     duration_split = duration.split(":")
     duration_hours = int(duration_split[0])
     duration_minutes = int(duration_split[1])
+
+    # assign a numerical value to each day of the week
+    day = day.lower()
+    start_day = 0
+    if day == "sunday":
+        start_day = 0
+    elif day == "monday":
+        start_day = 1
+    elif day == "tuesday":
+        start_day = 2
+    elif day == "wednesday":
+        start_day = 3
+    elif day == "thursday":
+        start_day = 4
+    elif day == "friday":
+        start_day = 5
+    elif day == "saturday":
+        start_day = 6
 
     # change into military time for ease of calculation
     if am_or_pm == "PM" and start_hours < 12:
@@ -59,11 +75,27 @@ def add_time(start, duration):
     else:
         days_later = str(number_days) + " days later"
 
-    print(f"{new_hours}:{new_minutes} {am_or_pm} ({days_later})")
+    # create a list of the days of the week
+    days_of_week = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+
+    # calculate the new day of the week
+    if number_days >= 7:
+        number_days = number_days % 7
+    
+    new_day = start_day + number_days
+    if new_day >= 7:
+        new_day = new_day - 7
+    
+    new_day = days_of_week[new_day]
+
+
+    # print new calculated time
+    print("--------")
+    print(f"Calculated Time: {new_hours}:{new_minutes} {am_or_pm} on {new_day} ({days_later})")
 
 # beginning of program 
 user_start = input("Enter the start time: ")
 user_duration = input("Enter the duration time: ")
+user_day = input("Enter the day of the week: ")
 
-add_time(user_start, user_duration)
-
+add_time(user_start, user_duration, user_day)

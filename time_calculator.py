@@ -1,6 +1,6 @@
 # time calculator exercise from https://www.freecodecamp.org/learn/scientific-computing-with-python/scientific-computing-with-python-projects/time-calculator
 
-    # (optional) a starting day of the week, case insensitive
+# optional: add day of the week
 
 import math
 
@@ -17,9 +17,11 @@ def add_time(start, duration):
     duration_hours = int(duration_split[0])
     duration_minutes = int(duration_split[1])
 
-    # change into 24-hour time for ease of calculation
-    if am_or_pm == "PM":
+    # change into military time for ease of calculation
+    if am_or_pm == "PM" and start_hours < 12:
         start_hours = start_hours + 12
+    if am_or_pm == "AM" and start_hours == 12:
+        start_hours = 0
 
     # add the start_hours + duration_hours, and the start_minutes + duration_minutes
     new_hours = start_hours + duration_hours
@@ -40,14 +42,15 @@ def add_time(start, duration):
     # example- start time 5:00 PM, duration time 7:01. Output: 0:01 PM (next day). Expected Output: 12:01 AM (next day)
 
     if new_hours >= 12:
-        if am_or_pm == "AM":
-            am_or_pm = "PM"
-        else:
-            am_or_pm = "AM"
+        am_or_pm = "PM"
+        if new_hours > 12:
+            new_hours = new_hours - 12
+    else:
+        am_or_pm = "AM"
     
-    if new_hours > 12:
-        new_hours = new_hours - 12
-
+    if new_hours == 0:
+        new_hours = 12
+    
     # if new_minutes is a single-digit integer, format new_minutes to display a zero before the digit
     if new_minutes < 10:
         new_minutes = str(new_minutes).zfill(2)  

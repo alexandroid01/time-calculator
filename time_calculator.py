@@ -37,10 +37,6 @@ def add_time(start, duration):
     new_hours = new_hours - (24 * number_days)
    
     # change back into 12-hour time
-    # LOGIC ERROR NEED TO FIX
-    # example- start time 1:00 PM, duration time 22:00. Output: 11:00 PM (next day). Expected Output: 11:00 AM (next day)
-    # example- start time 5:00 PM, duration time 7:01. Output: 0:01 PM (next day). Expected Output: 12:01 AM (next day)
-
     if new_hours >= 12:
         am_or_pm = "PM"
         if new_hours > 12:
